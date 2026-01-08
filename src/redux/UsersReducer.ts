@@ -10,6 +10,10 @@ const SET_CURRENT_PAGE = 'UsersReducer/SETCURRENTPAGE' as const
 const SET_TOTAL_COUNT = 'UsersReducer/SET_TOTAL_COUNT' as const
 const TOOGLE_IS_FATCHING = 'UsersReducer/TOGGLEISFATCHING' as const
 const TOOGLE_IS_FOLLOWING = 'UsersReducer/TOGGLEISFOLLOWING' as const
+const SEARCH_TERM = 'UsersReducer/SEARCH_TERM' as const
+const Friend = 'UsersReducer/Friend' as const
+
+
 
 let initialState = {
     Users: [] as UsersType[],
@@ -17,10 +21,14 @@ let initialState = {
     PageSize: 5,
     currentPage: 1,
     isFatching: false,
-    FollowingInProgress: [] as number[]
+    FollowingInProgress: [] as number[],
+    searchTerm: "" as string,
+    friend: null as boolean | null 
 }
 
-type initialStateType = typeof initialState
+export type initialStateType = typeof initialState
+export type searchtype = typeof initialState.searchTerm
+
 
 const UserPage = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
@@ -57,6 +65,8 @@ const UserPage = (state: initialStateType = initialState, action: ActionType): i
                     ? [...state.FollowingInProgress, action.UserId]
                     : state.FollowingInProgress.filter(id => id !== action.UserId)
             }
+        case SEARCH_TERM: return {...state, searchTerm: action.search}
+        case Friend: return {...state, friend: action.isFriend}
         default:
             return state
     }
@@ -70,8 +80,11 @@ export const SetCurrentPage = (p: number) => ({ type: SET_CURRENT_PAGE, currentP
 export const SetTotalUserCount = (total: number) => ({ type: SET_TOTAL_COUNT, total } as const);
 export const ToggleIsFatching = (isFatching: boolean) => ({ type: TOOGLE_IS_FATCHING, isFatching } as const);
 export const ToggleIsFollowing = (isFollowing: boolean, UserId: number) => ({ type: TOOGLE_IS_FOLLOWING, isFollowing, UserId } as const);
+export const SearchTerm = (search: string) => ({ type: SEARCH_TERM, search} as const);
+export const FriendSearch = (isFriend: null | boolean) => ({ type: Friend, isFriend} as const);
 
-type ActionType =
+
+export type ActionType =
     | ReturnType<typeof AcceptFollow>
     | ReturnType<typeof AcceptUnFollow>
     | ReturnType<typeof SetUsers>
@@ -79,24 +92,30 @@ type ActionType =
     | ReturnType<typeof SetTotalUserCount>
     | ReturnType<typeof ToggleIsFatching>
     | ReturnType<typeof ToggleIsFollowing>
+    | ReturnType<typeof SearchTerm>
+    | ReturnType<typeof FriendSearch>
 
+
+    
 type ApiResponseType = {
     resultCode: number
 }
 
 type ApiMethodType = (userId: number) => Promise<ApiResponseType>
 
-export const GetUsers = (currentPage: number, PageSize: number) => {
+export const GetUsers = (currentPage: number, PageSize: number, search: string, isFriend: boolean | null) => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch(ToggleIsFatching(true))
 
-            let data = await UsersApi.GetUsers(currentPage, PageSize)
+            let data = await UsersApi.GetUsers(currentPage, PageSize, search)
 
             dispatch(SetUsers(data.items))
             dispatch(SetCurrentPage(currentPage))
             dispatch(SetTotalUserCount(data.totalCount))
             dispatch(ToggleIsFatching(false))
+            dispatch(SearchTerm(search))
+            dispatch(FriendSearch(isFriend))
         } catch (error: unknown) {
             dispatch(ToggleIsFatching(false))
             if (error instanceof Error) {
@@ -107,6 +126,7 @@ export const GetUsers = (currentPage: number, PageSize: number) => {
         }
     }
 }
+
 
 const FollowUnFollowFlow = async (
     dispatch: AppDispatch,

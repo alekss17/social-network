@@ -44,3 +44,14 @@ export const FollowingInProgress = (state: RootState) => {
          state.UserPageReducer.FollowingInProgress
     )
 }
+
+export const Search = (state: RootState) => {
+    return (
+        state.UserPageReducer.searchTerm
+    )
+}
+export const IsFriend = (state: RootState) => {
+    return (
+        state.UserPageReducer.friend
+    )
+}

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Users from './Users';
 import { AcceptUnFollow, AcceptFollow, GetUsers, ToggleIsFollowing, UnFollow, Follow} from '../../redux/UsersReducer';
 import Preloader from '../common/Preloader/Prelooader'
-import { FollowingInProgress, GetCurrentPage, GetFatching, GetPageSize, GetTotalUserCount, GetUsersSuper } from '../../redux/selectors/UsersSelector';
+import { FollowingInProgress, GetCurrentPage, GetFatching, GetPageSize, GetTotalUserCount, GetUsersSuper, IsFriend, Search } from '../../redux/selectors/UsersSelector';
 import { GetIsAuth, GetisAuthChecking } from '../../redux/selectors/authSelector';
 import { compose } from 'redux';
 import AuthRedirectComponent from '../../hoc/WithAuthNavigate';
@@ -19,8 +19,10 @@ interface UserApiContainerProps {
     FollowingInProgress: number[];
     isAuth: boolean;
     isAuthChecking: boolean;
+    SearchtermUser: string | null;
+    isFriend: boolean | null
 
-    GetUsers: (currentPage: number, PageSize: number) => void;
+    GetUsers: (currentPage: number, PageSize: number, search: string | null) => void;
     AcceptFollow: (id: number) => void;
     AcceptUnFollow: (id: number) => void;
     Follow: (UserId: number) => void;
@@ -31,15 +33,21 @@ interface UserApiContainerProps {
 class UsersApiContainer extends React.Component<UserApiContainerProps> {
 
     componentDidMount() {
-        const {currentPage, PageSize, GetUsers} = this.props;
+        const {currentPage, PageSize, SearchtermUser, isFriend, GetUsers} = this.props;
 
-        GetUsers(currentPage, PageSize);
+        GetUsers(currentPage, PageSize, SearchtermUser, isFriend);
     }
 
     OnePageChanged = (p: number) => {
-        const PageSize = this.props.PageSize;
+        const {PageSize, SearchtermUser, isFriend} = this.props;
 
-        this.props.GetUsers(p, PageSize);
+        this.props.GetUsers(p, PageSize, SearchtermUser, isFriend);
+    }
+
+    onTermChanged = (valuesSearchUser: string, valuesFriendUser: boolean | null) => {
+        const {PageSize} = this.props;
+
+        this.props.GetUsers(1, PageSize, valuesSearchUser, valuesFriendUser)
     }
 
     render() {
@@ -48,6 +56,7 @@ class UsersApiContainer extends React.Component<UserApiContainerProps> {
             <Users
                {...this.props}
                 OnePageChanged={this.OnePageChanged}
+                onTermChanged={this.onTermChanged}
             />
         </>
     }
@@ -62,7 +71,9 @@ let MapStateToProps = (state: RootState) => {
         isFatching: GetFatching(state),
         FollowingInProgress: FollowingInProgress(state),
         isAuth: GetIsAuth(state),
-        isAuthChecking: GetisAuthChecking(state)
+        isAuthChecking: GetisAuthChecking(state),
+        SearchtermUser: Search(state),
+        isFriend: IsFriend(state)
     }
 }
 

@@ -84,6 +84,9 @@ export type DialogType = {
     captcha: string;
 }
 
+
+
+// enums
 export enum ResultCodeEnum {
     Succes = 0, 
     Error = 1,

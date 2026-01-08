@@ -18,10 +18,12 @@ instance.interceptors.request.use((config) => {
 
     return config
 })
+
+
 export const UsersApi = {
-    GetUsers(currentPage: number = 1, pageSize: number = 5) {
+    GetUsers(currentPage: number = 1, pageSize: number = 5, search: string = "", friend: boolean | null = null) {
         return instance
-            .get(`users?page=${currentPage}&count=${pageSize}`)
+            .get(`users?page=${currentPage}&count=${pageSize}&term=${search}&friend=${friend}`)
             .then(res => res.data)
     },
 
