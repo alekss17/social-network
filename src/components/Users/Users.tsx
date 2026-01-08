@@ -3,7 +3,7 @@ import '../../Styles/Users.css';
 import Paginator from '../common/Paginator/Pagination';
 import User from './User';
 import { UsersType } from '../../types/Types';
-import UserForm from '../Forms/UsersForm';
+import UserForm, { changedvalues } from '../Forms/UsersForm';
 
 interface UserTypeProps {
     currentPage: number;
@@ -14,7 +14,7 @@ interface UserTypeProps {
     FollowingInProgress: number[];
     Follow: (UserId: number) => void;
     UnFollow: (UserId: number) => void;
-    onTermChanged: (values: string) => void;
+    onTermChanged: (changedvalues: changedvalues) => void;
 }
 
 const Users = React.memo(({currentPage, TotalUserCount, PageSize, Users, OnePageChanged, FollowingInProgress, Follow, UnFollow, onTermChanged}: UserTypeProps) => {

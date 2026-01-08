@@ -108,7 +108,7 @@ export const GetUsers = (currentPage: number, PageSize: number, search: string, 
         try {
             dispatch(ToggleIsFatching(true))
 
-            let data = await UsersApi.GetUsers(currentPage, PageSize, search)
+            let data = await UsersApi.GetUsers(currentPage, PageSize, search, isFriend)
 
             dispatch(SetUsers(data.items))
             dispatch(SetCurrentPage(currentPage))

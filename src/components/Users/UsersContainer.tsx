@@ -9,6 +9,7 @@ import { compose } from 'redux';
 import AuthRedirectComponent from '../../hoc/WithAuthNavigate';
 import { RootState } from '../../redux/redux-store';
 import { UsersType } from '../../types/Types';
+import { changedvalues } from '../Forms/UsersForm';
 
 interface UserApiContainerProps {
     currentPage: number;
@@ -22,7 +23,7 @@ interface UserApiContainerProps {
     SearchtermUser: string | null;
     isFriend: boolean | null
 
-    GetUsers: (currentPage: number, PageSize: number, search: string | null) => void;
+    GetUsers: (currentPage: number, PageSize: number, search: string | null, isFriend: boolean | null) => void;
     AcceptFollow: (id: number) => void;
     AcceptUnFollow: (id: number) => void;
     Follow: (UserId: number) => void;
@@ -44,10 +45,10 @@ class UsersApiContainer extends React.Component<UserApiContainerProps> {
         this.props.GetUsers(p, PageSize, SearchtermUser, isFriend);
     }
 
-    onTermChanged = (valuesSearchUser: string, valuesFriendUser: boolean | null) => {
+    onTermChanged = (changedvalues: changedvalues) => {
         const {PageSize} = this.props;
 
-        this.props.GetUsers(1, PageSize, valuesSearchUser, valuesFriendUser)
+        this.props.GetUsers(1, PageSize, changedvalues.SearchUser, changedvalues.friends)
     }
 
     render() {

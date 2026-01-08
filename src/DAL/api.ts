@@ -23,7 +23,7 @@ instance.interceptors.request.use((config) => {
 export const UsersApi = {
     GetUsers(currentPage: number = 1, pageSize: number = 5, search: string = "", friend: boolean | null = null) {
         return instance
-            .get(`users?page=${currentPage}&count=${pageSize}&term=${search}&friend=${friend}`)
+            .get(`users?page=${currentPage}&count=${pageSize}&term=${search}` + (friend === null ? '' : `&friend=${friend}` ) )
             .then(res => res.data)
     },
 
