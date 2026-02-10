@@ -9,8 +9,14 @@ import { Button, Upload } from 'antd';
 import type { UploadProps } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ProfileTypeProps, UserProfile, Contacts, ProfileFormValue } from '../../types/Types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/redux-store';
 
-const ProfileInfo = ({ profile, profileStatus, UpdateProfileStats, isOwner, savePhoto, ProfileLoading, saveProfile }: ProfileTypeProps) => {
+const ProfileInfo = ({UpdateProfileStats, isOwner, savePhoto, saveProfile }: ProfileTypeProps) => {
+    const profile = useSelector((state: RootState) => state.ProfileReducer.profile);
+    const profileStatus = useSelector((state: RootState) => state.ProfileReducer.ProfileStatus);
+    const ProfileLoading = useSelector((state: RootState) => state.ProfileReducer.ProfileLoading);
+
     const [editMode, setEditMode] = useState<boolean>(false)
 
     if (!ProfileLoading || !profile) return <Preloader />

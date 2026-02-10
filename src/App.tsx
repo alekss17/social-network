@@ -1,115 +1,110 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
-import { InitializeApp, ToogleErrorTH } from './redux/appReducer';
-import { connect } from 'react-redux';
+import React from 'react';
+import './Styles/App.css';
+import { Routes, Route, Navigate, HashRouter, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { AppInitialized, GlobalErr } from './redux/selectors/appSelector';
-import { DeleteMessageTH } from './redux/DialogsPageReducer';
+import Preloader from './components/common/Preloader/Prelooader';
+import store, { persistor } from './redux/redux-store';
+import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
+import Chat from "./components/Chat/Chat"
 
-import './Styles/App.css';
-
-import NavBar from './NavBar';
-import HeaderContainer from './components/Header/HeaderContainer';
 import TestForProps from './components/tests';
 import Login from './components/Login/login';
-import Preloader from './components/common/Preloader/Prelooader';
-import store, { persistor, RootState } from './redux/redux-store';
-import ChatUser from './components/Dialogs/ChatUser';
-import Dialogs from './components/Dialogs/DialogsContainer';
 
-import Music from './components/Music/Music';
 import Settings from './components/Settings/Settings';
 import HelperSuspense from './components/common/Preloader/HelperSuspense';
+import SubMenu from 'antd/es/menu/SubMenu';
+import HeaderApp from './components/Header/Header';
 
 const MypostsContainer = React.lazy(() => import('./components/Myposts/MypostsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
 
-interface AppPropsType {
-  initialized: boolean
-  err: string | null
-  InitializeApp: () => void
-  ToogleErrorTH: (err: string | null) => void
-}
+const { Content, Footer, Sider } = Layout;
 
-function App(props: AppPropsType) {
-  const catchAllUnhandleErrors = (event: PromiseRejectionEvent) => {
-    const reason = event.reason;
-    
-    const message =
-      reason?.response?.data?.message ||
-      reason?.message ||
-      (typeof reason === 'string' ? reason : null) ||
-      "Unhandled promise rejection";
-  
-    props.ToogleErrorTH(message);
-  };
-
-  useEffect(() => {
-    props.InitializeApp();
-
-    window.addEventListener("unhandledrejection", catchAllUnhandleErrors);
-
-    return () => {
-      window.removeEventListener("unhandledrejection", catchAllUnhandleErrors);
-    };
-  }, []);
-
-  if (!props.initialized) {
-    return <Preloader />;
-  }
+function App() {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
 
   return (
-    <div className="app-wrapper">
-      <div className='ContainerGlobalEror'>
-        <h1 className='GlobalError'>{props.err}</h1>
+    <Layout>
+      <HeaderApp />
+      <div style={{ padding: '0 48px' }}>
+        <Breadcrumb
+          style={{ margin: '16px 0' }}
+          items={[{ title: 'Home' }, { title: 'List' }, { title: 'App' }]}
+        />
+        <Layout
+          style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}
+        >
+          <Sider style={{ background: colorBgContainer }} width={200}>
+            {/* <Menu
+
+            /> */}
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1']}
+              style={{ height: '100%' }}
+            >
+              <SubMenu key="sub1" title="My profile">
+                <Menu.Item key="1">
+                  <Button type='link'>
+                    <Link type='link' to="/profile">Profile</Link>
+                  </Button>
+                </Menu.Item>
+
+                <Menu.Item key="2">
+                  <Button type='link'>
+                    <Link type='link' to="/chat">Chat</Link>
+                  </Button>
+                </Menu.Item>
+              </SubMenu>
+
+              <SubMenu key="sub2" title="Developers">
+                <Menu.Item key="3">
+                  <Button type='link'>
+                    <Link type='link' className='Home' to="/developers">Developers</Link>
+                  </Button>
+                </Menu.Item>
+              </SubMenu>
+
+            </Menu>
+          </Sider>
+          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+            <Routes>
+              <Route path="/chat" element={<Chat />}></Route>
+
+              <Route path="/profile/:userId?" element={<HelperSuspense Component={ProfileContainer} />} />
+
+              <Route path="/myposts" element={<HelperSuspense Component={MypostsContainer} />} />
+
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/test" element={<TestForProps />} />
+
+              <Route path="/developers" element={<HelperSuspense Component={UsersContainer} />} />
+
+              <Route path="/login" element={<Login />} />
+
+              <Route path="/" element={<Navigate to="/profile" />} />
+            </Routes>
+          </Content>
+        </Layout>
       </div>
-      <HeaderContainer />
-      <div className="main">
-        <NavBar />
-
-        <div className="content">
-          <Routes>
-            <Route path="/dialogs" element={<Dialogs />}>
-              <Route path=":userId" element={<ChatUser DeleteMessage={DeleteMessageTH} />} />
-            </Route>
-
-            <Route path="/profile/:userId?" element={<HelperSuspense Component={ProfileContainer} />} />
-
-            <Route path="/myposts" element={<HelperSuspense Component={MypostsContainer} />} />
-
-            <Route path="/music" element={<Music />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/test" element={<TestForProps />} />
-
-            <Route path="/users" element={<HelperSuspense Component={UsersContainer} />} />
-
-            <Route path="/login" element={<Login />} />
-
-            <Route path="/" element={<Navigate to="/profile" />} />
-          </Routes>
-        </div>
-      </div>
-    </div>
+      <Footer style={{ textAlign: 'center' }}>
+        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+      </Footer>
+    </Layout>
   );
 }
-
-const mapStateToProps = (state: RootState) => {
-  return {
-    initialized: AppInitialized(state),
-    err: GlobalErr(state)
-  };
-};
-
-let AppContainer = connect(mapStateToProps, { InitializeApp, ToogleErrorTH })(App);
 
 let SamurajJSApp = () => {
   return (
     <HashRouter>
       <Provider store={store}>
         <PersistGate loading={<Preloader />} persistor={persistor}>
-          <AppContainer />
+          <App />
         </PersistGate>
       </Provider>
     </HashRouter>

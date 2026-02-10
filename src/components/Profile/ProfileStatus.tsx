@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "antd";
-import '../../Styles/Myposts.css'
-
 
 interface ComponentProps {
     profileStatus: string;

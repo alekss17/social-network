@@ -32,12 +32,9 @@ export type ProfileFormValue = {
     contacts: Contacts;
 }
 export type ProfileTypeProps = {
-    profile: UserProfile | null;
-    profileStatus: string;
     UpdateProfileStats: (status: string) => void;
     isOwner: boolean;
     savePhoto: (file: File) => void;
-    ProfileLoading: boolean;
     saveProfile: (profile: ProfileFormValue) => Promise<any>
 }
 

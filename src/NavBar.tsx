@@ -7,21 +7,14 @@ const NavBar = () => {
   return (
     <div>
         <div className='Routes'>
-      <Button type='link'>
-      <Link type='link' className='Home' to="/profile">Profile</Link>
-      </Button>
-      <Button type='link'>
-      <Link type='link' className='Home' to="/dialogs">Dialogs</Link>
-      </Button>
+
       <Button type='link'>
       <Link type='link' className='Home' to="/music">Music</Link>
       </Button>
       <Button type='link'>
       <Link type='link' className='Home' to="/settings">Settings</Link>
       </Button>
-      <Button type='link'>
-      <Link type='link' className='Home' to="/users">Users</Link>
-      </Button>
+
       </div>
     </div>
   );

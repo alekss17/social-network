@@ -12,9 +12,6 @@ const ProfileContainer = () => {
   const dispatch: AppDispatch = useDispatch();
   
   const meId = useSelector((state: RootState) => state.auth.userId);
-  const profile = useSelector((state: RootState) => state.ProfileReducer.profile);
-  const profileStatus = useSelector((state: RootState) => state.ProfileReducer.ProfileStatus);
-  const ProfileLoading = useSelector((state: RootState) => state.ProfileReducer.ProfileLoading);
   
   const userId = urlUserId ? Number(urlUserId) : meId;
   const isOwner = meId === userId;
@@ -26,7 +23,6 @@ const ProfileContainer = () => {
     }
   }, [userId, dispatch]);
   
-  // ✅ С useCallback для оптимизации
   const handleSaveProfile = useCallback(async (profileData: ProfileFormValue): Promise<any> => {
     return await dispatch(saveProfile(profileData));
   }, [dispatch]);
@@ -42,9 +38,6 @@ const ProfileContainer = () => {
   return (
     <Profile 
       isOwner={isOwner}
-      profile={profile}
-      profileStatus={profileStatus}
-      ProfileLoading={ProfileLoading}
       UpdateProfileStats={handleUpdateProfileStats}
       savePhoto={handleSavePhoto}
       saveProfile={handleSaveProfile}

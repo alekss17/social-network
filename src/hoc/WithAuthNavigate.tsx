@@ -17,10 +17,6 @@ const AuthRedirectComponent = (WrappedComponent: React.ComponentType<any>) => {
   const WithAuthRedirect = (props: InjectedProps) => {
     const { isAuthChecking, isAuth, ...restProps } = props;
 
-    if (isAuthChecking) {
-      return <Preloader />;
-    }
-
     if (!isAuth) {
       return <Navigate to="/login" replace />;
     }

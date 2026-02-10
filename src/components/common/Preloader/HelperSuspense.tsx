@@ -7,7 +7,7 @@ type HelperSuspenseProps = {
 
 const HelperSuspense = ({ Component }: HelperSuspenseProps) => {
   return (
-    <React.Suspense fallback={<Preloader />}>
+    <React.Suspense fallback={""}>
       <Component />
     </React.Suspense>
   )
