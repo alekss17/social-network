@@ -2,7 +2,7 @@
   "name": "testing",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://alekss17.github.io/testing",
+  "homepage": "https://alekss17.github.io/social-network",
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.2",
     "@testing-library/dom": "^10.4.0",
