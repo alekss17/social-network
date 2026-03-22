@@ -469,7 +469,7 @@ button[type="submit"]:not(.btn-cancel):active {
 
 /* Ant Design Menu Item overrides */
 .ant-menu-item {
-  color: white !important;
+  color: black !important;
   transition: all 0.3s ease !important;
 }
 
@@ -485,7 +485,7 @@ button[type="submit"]:not(.btn-cancel):active {
 
 /* Submenu styling */
 .ant-menu-submenu-title {
-  color: white !important;
+  color: black !important;
   transition: all 0.3s ease !important;
 }
 
