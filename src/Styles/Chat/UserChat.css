@@ -1,0 +1,25 @@
+.ChatMessage {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .ChatMessage {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 600px) {
+    .ChatMessage {
+        gap: 4px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .ChatMessage {
+        gap: 3px;
+        font-size: 12px;
+    }
+}

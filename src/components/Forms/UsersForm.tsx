@@ -2,6 +2,7 @@ import { Field, Formik, Form } from "formik"
 import TextArea, { createField } from "../common/FormsControl/FormsControl";
 import { useSelector } from "react-redux";
 import { IsFriend, Search } from "../../redux/selectors/UsersSelector";
+import '../../Styles/UsersForm.css'
 
 type UserFormType = {
     onTermChanged: (changedvalues: changedvalues) => void;
@@ -23,14 +24,20 @@ const UserForm = ({onTermChanged}: UserFormType) => {
             }
             onTermChanged(changedvalues)
         }}>
-            <Form>
-                <Field name="friends" as="select">
-                    <option value={"null"}>All</option>
-                    <option value={"true"}>Only followed</option>
-                    <option value={"false"}>Only Unfollowed</option>
-                </Field>
-                {createField('Search', 'SearchUser', undefined, TextArea, 'input')}
-                <button type='submit'>Submit</button>
+            <Form className="users-filter-form">
+                <div className="filter-group">
+                    <label htmlFor="friends-filter">Filter:</label>
+                    <Field id="friends-filter" name="friends" as="select" className="filter-select">
+                        <option value={"null"}>All Users</option>
+                        <option value={"true"}>Only Followed</option>
+                        <option value={"false"}>Only Unfollowed</option>
+                    </Field>
+                </div>
+                <div className="filter-group">
+                    <label htmlFor="search-user">Search:</label>
+                    {createField('', 'SearchUser', undefined, TextArea, 'input')}
+                </div>
+                <button type='submit' className="filter-submit">🔍 Apply Filter</button>
             </Form>
         </Formik>
     )

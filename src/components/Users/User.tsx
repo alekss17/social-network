@@ -13,11 +13,17 @@ interface UserProps {
 
 const User = React.memo(({User, FollowingInProgress, Follow, UnFollow}: UserProps) => {
     return (
-        <div>
+        <div className="user-card">
             <div>
                 <NavLink to={'/profile/' + User.id}>
                     <img className="ManPhoto" src={User.photos.small || userPhoto} alt={User.name} />
                 </NavLink>
+            </div>
+            <div style={{ flex: 1 }}>
+                <div>{User.name}</div>
+                <div>{User.status}</div>
+            </div>
+            <div className="user-actions">
                 {User.followed
                     ? <button 
                         disabled={FollowingInProgress.some(id => id === User.id)} 
@@ -32,10 +38,6 @@ const User = React.memo(({User, FollowingInProgress, Follow, UnFollow}: UserProp
                         Follow
                       </button>
                 }
-            </div>
-            <div>
-                <div>{User.name}</div>
-                <div>{User.status}</div>
             </div>
         </div>
     );

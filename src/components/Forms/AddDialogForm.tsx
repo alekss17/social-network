@@ -17,9 +17,9 @@ const AddDialogForm = (props: addDialogForm) => {
             <Form className="dopRef">
                 <Field className="TextAreaDialogs" name={"onDialogBody"}
                  validate={validate}
-                  component={TextArea} placeholder="type message"
+                  component={TextArea} placeholder="📝 Type a message..."
                   astag={"textarea"} />
-                <button className="GetPostButton" type={"submit"} >добавить</button>
+                <button className="GetPostButton" type={"submit"}>✉️ Send</button>
             </Form>
         </Formik>
         </>

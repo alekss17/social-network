@@ -3,6 +3,7 @@ import { Form, Formik } from "formik";
 import { required, MaxLenghtCreator } from "../../utils/validators/validators";
 import TextArea, { createField } from '../common/FormsControl/FormsControl';
 import '../../Styles/formControl.css'
+import '../../Styles/LoginForm.css'
 import { formDataType } from "../../types/Types";
 
 const MaxLenght40 = MaxLenghtCreator(40);
@@ -24,42 +25,56 @@ const LoginForm = ({ formError, Submit, captchaUrl }: LoginFormType) => {
   const validate = (value: string) => required(value) || MaxLenght40(value);
 
   return (
-    <Formik
-      initialValues={{ email: "", password: "", rememberMe: false, captcha: "" }}
-      enableReinitialize={true}
-      initialStatus={formError || null}
-      onSubmit={(values, { setSubmitting, setStatus }) => {
-        setStatus(null);
-        Submit(values);
-        setSubmitting(false);
-      }} >
-      {({ status }) => (
-        <Form>
-
-          {createField("email", "email", validate, TextArea, "input")}
-          {createField("Password", "password", validate, TextArea, "input", "password")}
-          {createField("", "rememberMe", undefined, undefined, undefined, "checkbox", "remember me")}
-
-          {!isEmpty(status) &&
-            <div className="form-summary-error">
-              {Array.isArray(status) ? status.join(", ") : status}
+    <div className="login-form-wrapper">
+      <Formik
+        initialValues={{ email: "", password: "", rememberMe: false, captcha: "" }}
+        enableReinitialize={true}
+        initialStatus={formError || null}
+        onSubmit={(values, { setSubmitting, setStatus }) => {
+          setStatus(null);
+          Submit(values);
+          setSubmitting(false);
+        }} >
+        {({ status }) => (
+          <Form className="login-form">
+            <div className="login-header">
+              <h2>🔐 Login</h2>
+              <p>Enter your credentials to access your profile</p>
             </div>
-          }
 
-          {captchaUrl &&
-            <div>
-              <img src={captchaUrl} />
-              {createField("Captcha", "captcha", validate, TextArea, "input")}
+            <div className="login-fields">
+              {createField("email", "email", validate, TextArea, "input")}
+              {createField("Password", "password", validate, TextArea, "input", "password")}
             </div>
-          }
 
-          <div>
-            <button type="submit">Login</button>
-          </div>
+            <div className="login-remember">
+              {createField("", "rememberMe", undefined, undefined, undefined, "checkbox", "Remember me")}
+            </div>
 
-        </Form>
-      )}
-    </Formik>
+            {!isEmpty(status) &&
+              <div className="login-error">
+                <span className="error-icon">⚠️</span>
+                <div className="error-content">
+                  {Array.isArray(status) ? status.join(", ") : status}
+                </div>
+              </div>
+            }
+
+            {captchaUrl &&
+              <div className="login-captcha">
+                <img src={captchaUrl} alt="Captcha" />
+                {createField("Captcha", "captcha", validate, TextArea, "input")}
+              </div>
+            }
+
+            <button type="submit" className="login-submit">
+              🚀 Login to Account
+            </button>
+
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

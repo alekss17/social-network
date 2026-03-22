@@ -1,31 +1,433 @@
+/* ========== PAGINATION NUMBERS ========== */
+.ActiveSpanPageUsers {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: white;
+  background: #2f54eb;
+  border-radius: 4px;
+  transition: 0.2s;
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+
+.ActiveSpanPageUsers:hover {
+  background: #1f40d9;
+  transform: scale(1.05);
+}
+
+.SpanPaginationNumberBTN {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  color: #555;
+  border-radius: 4px;
+  transition: 0.2s;
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+
+.SpanPaginationNumberBTN:hover {
+  color: #2f54eb;
+  background: rgba(47, 84, 235, 0.1);
+  transform: scale(1.05);
+}
+
+/* ========== PAGINATOR CONTAINER ========== */
+.Paginator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.Paginator button {
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+  min-height: 32px;
+}
+
+.Paginator button:hover:not(:disabled) {
+  color: #2f54eb;
+  border-color: #2f54eb;
+  background: rgba(47, 84, 235, 0.05);
+}
+
+.Paginator button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.Paginator button:active {
+  transform: scale(0.95);
+}
+
+/* ========== USER CARD ========== */
+.user-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  align-items: center;
+  transition: 0.2s;
+}
+
+.user-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.user-card > div:first-child {
+  flex-shrink: 0;
+}
+
+.user-card > div:nth-child(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.user-card > div:nth-child(2) > div:first-child {
+  font-weight: 600;
+  color: #141e30;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-card > div:nth-child(2) > div:last-child {
+  font-size: 13px;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========== USER PHOTO ========== */
 .ManPhoto {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  border: 2px solid #f0f0f0;
+}
+
+/* ========== USER ACTIONS ========== */
+.user-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+}
+
+.user-actions button {
+  padding: 6px 12px;
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: 0.2s;
+  min-height: 32px;
+  white-space: nowrap;
+}
+
+.user-actions button:hover:not(:disabled) {
+  color: #2f54eb;
+  border-color: #2f54eb;
+  background: rgba(47, 84, 235, 0.05);
+  transform: translateY(-2px);
+}
+
+.user-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.user-actions button:active {
+  transform: scale(0.95);
+}
+
+/* ========== DESKTOP (1200px+) ========== */
+@media (min-width: 1200px) {
+  .ManPhoto {
+    width: 100px;
+    height: 100px;
   }
-  
-  .ActiveSpanPageUsers {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 6px;
-    cursor: pointer;
-    color: #2f54eb;
+
+  .user-card {
+    padding: 14px;
+    gap: 14px;
   }
-  
+
+  .ActiveSpanPageUsers,
   .SpanPaginationNumberBTN {
-    font-size: 20px;
+    font-size: 22px;
+    margin: 0 8px;
+    padding: 6px 10px;
+    min-width: 40px;
+  }
+}
+
+/* ========== LAPTOP (1024px - 1199px) ========== */
+@media (max-width: 1199px) and (min-width: 1024px) {
+  .ManPhoto {
+    width: 80px;
+    height: 80px;
+  }
+
+  .user-card {
+    padding: 12px;
+  }
+
+  .ActiveSpanPageUsers,
+  .SpanPaginationNumberBTN {
+    font-size: 18px;
     margin: 0 6px;
-    cursor: pointer;
-    color: #555;
   }
-  
-  .SpanPaginationNumberBTN:hover {
-    color: #000;
+
+  .Paginator button {
+    font-size: 12px;
+    padding: 6px 10px;
   }
-  
+}
+
+/* ========== TABLET (768px - 1023px) ========== */
+@media (max-width: 1023px) {
+  .ManPhoto {
+    width: 70px;
+    height: 70px;
+  }
+
+  .user-card {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .user-card > div:nth-child(2) > div:first-child {
+    font-size: 14px;
+  }
+
+  .user-card > div:nth-child(2) > div:last-child {
+    font-size: 12px;
+  }
+
+  .ActiveSpanPageUsers,
+  .SpanPaginationNumberBTN {
+    font-size: 16px;
+    margin: 0 4px;
+    padding: 4px 8px;
+    min-width: 36px;
+  }
+
   .Paginator {
-    display: flex;
-    align-items: center;
+    gap: 4px;
   }
+
+  .Paginator button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .user-actions button {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}
+
+/* ========== MOBILE LANDSCAPE (600px - 767px) ========== */
+@media (max-width: 767px) {
+  .ManPhoto {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-card {
+    padding: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .user-card > div:nth-child(2) {
+    flex-basis: 100%;
+    order: 2;
+  }
+
+  .user-card > div:nth-child(2) > div:first-child {
+    font-size: 13px;
+  }
+
+  .user-card > div:nth-child(2) > div:last-child {
+    font-size: 11px;
+  }
+
+  .user-actions {
+    flex-basis: 100%;
+    order: 3;
+    gap: 6px;
+  }
+
+  .ActiveSpanPageUsers,
+  .SpanPaginationNumberBTN {
+    font-size: 14px;
+    margin: 0 3px;
+    padding: 4px 6px;
+    min-width: 32px;
+  }
+
+  .Paginator {
+    gap: 3px;
+    margin: 16px 0;
+  }
+
+  .Paginator button {
+    padding: 5px 8px;
+    font-size: 11px;
+    min-height: 30px;
+  }
+
+  .user-actions button {
+    padding: 4px 8px;
+    font-size: 10px;
+    min-height: 28px;
+  }
+}
+
+/* ========== MOBILE PORTRAIT (480px - 599px) ========== */
+@media (max-width: 599px) {
+  .ManPhoto {
+    width: 50px;
+    height: 50px;
+  }
+
+  .user-card {
+    padding: 6px;
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .user-card > div:first-child {
+    text-align: center;
+    align-self: center;
+  }
+
+  .user-card > div:nth-child(2) {
+    flex-basis: 100%;
+  }
+
+  .user-card > div:nth-child(2) > div:first-child {
+    font-size: 12px;
+  }
+
+  .user-card > div:nth-child(2) > div:last-child {
+    font-size: 10px;
+  }
+
+  .user-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .user-actions button {
+    flex: 1;
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  .ActiveSpanPageUsers,
+  .SpanPaginationNumberBTN {
+    font-size: 12px;
+    margin: 0 2px;
+    padding: 3px 5px;
+    min-width: 28px;
+  }
+
+  .Paginator {
+    gap: 2px;
+    margin: 12px 0;
+  }
+
+  .Paginator button {
+    padding: 4px 6px;
+    font-size: 10px;
+    min-height: 28px;
+  }
+}
+
+/* ========== SMALL PHONES (max-width: 479px) ========== */
+@media (max-width: 479px) {
+  .ManPhoto {
+    width: 45px;
+    height: 45px;
+  }
+
+  .user-card {
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .user-card > div:first-child {
+    text-align: center;
+  }
+
+  .user-card > div:nth-child(2) > div:first-child {
+    font-size: 11px;
+  }
+
+  .user-card > div:nth-child(2) > div:last-child {
+    font-size: 9px;
+  }
+
+  .user-actions {
+    width: 100%;
+  }
+
+  .user-actions button {
+    flex: 1;
+    padding: 3px 4px;
+    font-size: 9px;
+    border-radius: 3px;
+    min-height: 26px;
+  }
+
+  .ActiveSpanPageUsers,
+  .SpanPaginationNumberBTN {
+    font-size: 11px;
+    margin: 0 1px;
+    padding: 2px 4px;
+    min-width: 24px;
+  }
+
+  .Paginator {
+    gap: 2px;
+    margin: 8px 0;
+  }
+
+  .Paginator button {
+    padding: 3px 4px;
+    font-size: 9px;
+    min-height: 24px;
+  }
+}

@@ -43,7 +43,7 @@ const ProfileInfo = ({UpdateProfileStats, isOwner, savePhoto, saveProfile }: Pro
     
     return (
         <>
-            <img src={profile.photos?.large || UserImg} alt="Profile" />
+            <img className="profileLargePhoto" src={profile.photos?.large || UserImg} alt="Profile" />
 
             {isOwner && (
                 <div>
@@ -87,25 +87,34 @@ interface ProfileDataProps {
 const ProfileData = ({ profile, owner, goToEditMode }: ProfileDataProps) => {
     return (
         <>
-            {owner && <Button type='primary' onClick={goToEditMode}>edit</Button>}
+            {owner && (
+                <div className='profile-actions-compact'>
+                    <Button type='primary' size='small' onClick={goToEditMode}>
+                        ✎ Edit Profile
+                    </Button>
+                </div>
+            )}
             <div>
                 {profile.aboutMe &&
-                    <p>About Me: {profile.aboutMe}</p>
+                    <p className='profile-about'>About Me: {profile.aboutMe}</p>
                 }
             </div>
             <div className='Contacts'>
-                <b>Contacts</b>: {Object.keys(profile.contacts).map(key => {
-                    const contactKey = key as keyof Contacts;
-                    return <Contact key={key} contactTitle={key} contactValue={profile.contacts[contactKey]} />
-                })}
+                <h4 className='contacts-title'>Contacts</h4>
+                <div className='contacts-grid'>
+                    {Object.keys(profile.contacts).map(key => {
+                        const contactKey = key as keyof Contacts;
+                        return <Contact key={key} contactTitle={key} contactValue={profile.contacts[contactKey]} />
+                    })}
+                </div>
             </div>
             <div className='Job'>
-                <p>lookingForAJob: {profile.lookingForAJob === true ? 'yes' : 'no'}</p>
+                <p>Looking for a job: <strong>{profile.lookingForAJob === true ? 'Yes' : 'No'}</strong></p>
                 {profile.lookingForAJob &&
-                    <p>lookingForAJobDescription: {profile.lookingForAJobDescription}</p>
+                    <p>Description: {profile.lookingForAJobDescription}</p>
                 }
             </div>
-            <p className='Name'>fullName: {profile.fullName}</p>
+            <p className='Name'>Name: <strong>{profile.fullName}</strong></p>
         </>
     )
 }
@@ -116,7 +125,48 @@ interface ContactProps {
 }
 
 const Contact = ({ contactTitle, contactValue }: ContactProps) => {
-    return <div><b>{contactTitle}</b>: {contactValue}</div>
+    if (!contactValue) return null;
+    const icon = getContactIcon(contactTitle);
+    return (
+        <div className='contact-item'>
+            <span className='contact-icon'>{icon}</span>
+            <div className='contact-content'>
+                <span className='contact-label'>{contactTitle}</span>
+                <a href={getContactUrl(contactTitle, contactValue)} target='_blank' rel='noreferrer' className='contact-value'>
+                    {contactValue}
+                </a>
+            </div>
+        </div>
+    )
+}
+
+const getContactIcon = (type: string) => {
+    const icons: { [key: string]: string } = {
+        'github': '🔗',
+        'vk': 'VK',
+        'facebook': 'f',
+        'instagram': '📷',
+        'twitter': '𝕏',
+        'youtube': '▶',
+        'linkedin': 'in',
+        'website': '🌐'
+    };
+    return icons[type.toLowerCase()] || '🔗';
+}
+
+const getContactUrl = (type: string, value: string) => {
+    const urls: { [key: string]: (v: string) => string } = {
+        'github': (v) => `https://github.com/${v}`,
+        'vk': (v) => `https://vk.com/${v}`,
+        'facebook': (v) => `https://facebook.com/${v}`,
+        'instagram': (v) => `https://instagram.com/${v}`,
+        'twitter': (v) => `https://twitter.com/${v}`,
+        'youtube': (v) => `https://youtube.com/${v}`,
+        'linkedin': (v) => `https://linkedin.com/in/${v}`,
+        'website': (v) => v.startsWith('http') ? v : `https://${v}`
+    };
+    const urlBuilder = urls[type.toLowerCase()];
+    return urlBuilder ? urlBuilder(value) : '#';
 }
 
 export default ProfileInfo;

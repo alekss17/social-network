@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import DialogsPageR from './DialogsPageReducer';
 import ProfilePage from './ProfilePageReducer';
 import UserPage from './UsersReducer';
 import authReducer from './authReducer';
@@ -13,10 +12,9 @@ const profilePersistConfig = {
   whitelist: ['postData']
 };
 
-const dialogsPersistConfig = {
-  key: 'dialogs',
-  storage,
-  whitelist: ['Messages', 'dialogs']
+const ChatPersistConfig = {
+  key: 'chat',
+  storage
 };
 
 const authPersistConfig = {
@@ -26,7 +24,6 @@ const authPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  DialogsReducer: persistReducer(dialogsPersistConfig, DialogsPageR),
   ProfileReducer: persistReducer(profilePersistConfig, ProfilePage),
   UserPageReducer: UserPage,
   auth: persistReducer(authPersistConfig, authReducer),

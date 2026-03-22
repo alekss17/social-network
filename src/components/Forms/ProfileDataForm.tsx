@@ -34,8 +34,10 @@ const ProfileDataForm = ({ profile, handleSubmit, onLeaveSubmit }: ProfileDataFo
     >
       {() => (
         <Form>
-          <button className="Save" type="submit">Save</button>
-          <Button type="primary" onClick={onLeaveSubmit}>Leave</Button>
+          <div className="form-actions">
+            <button className="btn-save" type="submit">💾 Save</button>
+            <button className="btn-cancel" type="button" onClick={onLeaveSubmit}>✕ Cancel</button>
+          </div>
 
           <div>
             <p>fullName:</p>
