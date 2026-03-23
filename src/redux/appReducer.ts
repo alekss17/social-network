@@ -1,77 +1,66 @@
-import { GetMe, isAuthChecking } from './authReducer'
-import { AppDispatch } from './redux-store'
+import { getMe, setAuthChecking } from './authReducer';
+import { alertError } from '../utils/errorHandling';
+import { AppDispatch } from './redux-store';
 
-const INITIALIZED = 'appReducer/INITIALIZED' as const
-const TOOGLEERROR = "appReducer/TOOGLE_ERROR" as const
+const INITIALIZED = 'appReducer/INITIALIZED' as const;
+const TOGGLE_ERROR = 'appReducer/TOGGLE_ERROR' as const;
 
 const initialState = {
     initialized: false,
     globalError: null as string | null
-}
+};
 
-type initialStateType = typeof initialState
+type initialStateType = typeof initialState;
 
 const appReducer = (state: initialStateType = initialState, action: ActionType): initialStateType => {
     switch (action.type) {
         case INITIALIZED:
-            return { ...state, initialized: true }
+            return { ...state, initialized: true };
 
-        case TOOGLEERROR:
-            return { ...state, globalError: action.err }
+        case TOGGLE_ERROR:
+            return { ...state, globalError: action.error };
+
         default:
-            return state
+            return state;
     }
-}
+};
 
-export const SetInitialized = () => ({
-    type: INITIALIZED
-})
+export const setInitialized = () => ({ type: INITIALIZED } as const);
+export const toggleError = (error: string | null) => ({ type: TOGGLE_ERROR, error } as const);
 
-export const ToogleError = (err: string | null) => ({
-    type: TOOGLEERROR, err
-})
+export const SetInitialized = setInitialized;
+export const ToogleError = toggleError;
 
 type ActionType =
-    | ReturnType<typeof SetInitialized>
-    | ReturnType<typeof ToogleError>
+    | ReturnType<typeof setInitialized>
+    | ReturnType<typeof toggleError>;
 
-export const InitializeApp = () => async (dispatch: AppDispatch) => {
+export const initializeApp = () => async (dispatch: AppDispatch) => {
     try {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
 
         if (token) {
-            await dispatch(GetMe())
+            await dispatch(getMe());
         } else {
-            dispatch(isAuthChecking(false))
+            dispatch(setAuthChecking(false));
         }
-
-        dispatch(SetInitialized())
-    } catch (error: unknown) {
-        dispatch(isAuthChecking(false))
-        dispatch(SetInitialized())
-        
-        if (error instanceof Error) {
-            alert(error.message);
-        } else {
-            alert(String(error))
-        }
+    } catch (error) {
+        dispatch(setAuthChecking(false));
+        alertError(error);
+    } finally {
+        dispatch(setInitialized());
     }
-}
+};
 
-export const ToogleErrorTH = (err: string | null) => (dispatch: AppDispatch) => {
-    try {
-        dispatch(ToogleError(err))
+export const showGlobalError = (error: string | null) => (dispatch: AppDispatch) => {
+    dispatch(toggleError(error));
 
-        setTimeout(() => {
-            dispatch(ToogleError(null))
-        }, 10000)
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            alert(error.message);
-        } else {
-            alert(String(error))
-        }
-    }
-}
+    setTimeout(() => {
+        dispatch(toggleError(null));
+    }, 10000);
+};
 
-export default appReducer
+export const InitializeApp = initializeApp;
+export const ToogleErrorTH = showGlobalError;
+
+export default appReducer;

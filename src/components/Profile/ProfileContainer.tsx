@@ -2,41 +2,41 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useCallback } from 'react';
 import Profile from './Profile';
-import { GetProfile, GetProfilStatus, UpdateProfileStats, savePhoto, saveProfile } from '../../redux/ProfilePageReducer';
+import { getProfile, getProfileStatus, savePhoto, saveProfile, updateProfileStatus } from '../../redux/ProfilePageReducer';
 import { AppDispatch, RootState } from '../../redux/redux-store';
 import AuthRedirectComponent from '../../hoc/WithAuthNavigate';
-import { ProfileFormValue } from '../../types/Types';
+import { ProfileFormValue, SaveProfileResult } from '../../types/Types';
 
 const ProfileContainer = () => {
   const { userId: urlUserId } = useParams();
   const dispatch: AppDispatch = useDispatch();
-  
-  const meId = useSelector((state: RootState) => state.auth.userId);
-  
-  const userId = urlUserId ? Number(urlUserId) : meId;
-  const isOwner = meId === userId;
-  
+  const authorizedUserId = useSelector((state: RootState) => state.auth.userId);
+  const userId = urlUserId ? Number(urlUserId) : authorizedUserId;
+  const isOwner = authorizedUserId === userId;
+
   useEffect(() => {
-    if (userId) {
-      dispatch(GetProfile(userId));
-      dispatch(GetProfilStatus(userId));
+    if (!userId) {
+      return;
     }
-  }, [userId, dispatch]);
-  
-  const handleSaveProfile = useCallback(async (profileData: ProfileFormValue): Promise<any> => {
+
+    dispatch(getProfile(userId));
+    dispatch(getProfileStatus(userId));
+  }, [dispatch, userId]);
+
+  const handleSaveProfile = useCallback(async (profileData: ProfileFormValue): Promise<SaveProfileResult> => {
     return await dispatch(saveProfile(profileData));
   }, [dispatch]);
-  
+
   const handleUpdateProfileStats = useCallback((status: string) => {
-    dispatch(UpdateProfileStats(status));
+    dispatch(updateProfileStatus(status));
   }, [dispatch]);
-  
+
   const handleSavePhoto = useCallback((file: File) => {
     dispatch(savePhoto(file));
   }, [dispatch]);
-  
+
   return (
-    <Profile 
+    <Profile
       isOwner={isOwner}
       UpdateProfileStats={handleUpdateProfileStats}
       savePhoto={handleSavePhoto}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../../Styles/Users.css';
+import '../../../styles/Users.css';
 
 interface PaginatorProps {
     currentPage: number;

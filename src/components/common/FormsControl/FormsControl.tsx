@@ -1,6 +1,6 @@
 import React from "react";
 import { Field, FieldProps, getIn } from "formik";
-import "../../../Styles/formControl.css";
+import "../../../styles/formControl.css";
 
 type AsTag = "textarea" | "input" | "select";
 

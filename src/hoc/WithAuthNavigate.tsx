@@ -1,30 +1,26 @@
-import React from "react";
+import { ComponentType } from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { RootState } from "../redux/redux-store";
 import Preloader from "../components/common/Preloader/Prelooader";
+import { RootState } from "../redux/redux-store";
 
-interface InjectedProps {
-  isAuth: boolean;
-  isAuthChecking: boolean;
-}
-const mapStateToPropsForRedirect = (state: RootState): InjectedProps => ({
-  isAuth: state.auth.isAuth,
-  isAuthChecking: state.auth.isAuthChecking,
-});
+const AuthRedirectComponent = <P extends object>(WrappedComponent: ComponentType<P>) => {
+  const WithAuthRedirect = (props: P) => {
+    const isAuth = useSelector((state: RootState) => state.auth.isAuth);
+    const isAuthChecking = useSelector((state: RootState) => state.auth.isAuthChecking);
 
-const AuthRedirectComponent = (WrappedComponent: React.ComponentType<any>) => {
-  const WithAuthRedirect = (props: InjectedProps) => {
-    const { isAuthChecking, isAuth, ...restProps } = props;
+    if (isAuthChecking) {
+      return <Preloader />;
+    }
 
     if (!isAuth) {
       return <Navigate to="/login" replace />;
     }
 
-    return <WrappedComponent {...restProps} />;
+    return <WrappedComponent {...props} />;
   };
 
-  return connect(mapStateToPropsForRedirect)(WithAuthRedirect);
+  return WithAuthRedirect;
 };
 
 export default AuthRedirectComponent;

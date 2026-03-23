@@ -2,7 +2,7 @@ import { Field, Formik, Form } from "formik"
 import TextArea, { createField } from "../common/FormsControl/FormsControl";
 import { useSelector } from "react-redux";
 import { IsFriend, Search } from "../../redux/selectors/UsersSelector";
-import '../../Styles/UsersForm.css'
+import '../../styles/UsersForm.css'
 
 type UserFormType = {
     onTermChanged: (changedvalues: changedvalues) => void;
@@ -16,8 +16,9 @@ export type changedvalues = {
 const UserForm = ({onTermChanged}: UserFormType) => {
     const SearchtermUser = useSelector(Search)
     const isFriend = useSelector(IsFriend)
+    const initialFriendValue = isFriend === null ? "null" : String(isFriend)
     return (
-        <Formik enableReinitialize={true} initialValues={{SearchUser: SearchtermUser, friends: isFriend as null | boolean | string}} onSubmit={(values) => {
+        <Formik enableReinitialize={true} initialValues={{SearchUser: SearchtermUser, friends: initialFriendValue}} onSubmit={(values) => {
             const changedvalues:changedvalues = {
                 SearchUser: values.SearchUser,
                 friends: values.friends === "null" ? null : values.friends === "true" ? true : false

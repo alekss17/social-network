@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import '../../Styles/Users.css';
+import React, { useEffect, useRef } from 'react';
+import '../../styles/Users.css';
 import Paginator from '../common/Paginator/Pagination';
 import User from './User';
 import { UsersType } from '../../types/Types';
@@ -19,9 +19,13 @@ const Users = React.memo( () => {
     const SearchtermUser = useSelector(Search)
     const isFriend = useSelector(IsFriend)
     const dispatch: AppDispatch = useDispatch()
-    let Navigate = useNavigate()
+    const navigate = useNavigate()
+    const initializedFromQuery = useRef(false)
 
     useEffect(() => {
+        if (initializedFromQuery.current) return
+        initializedFromQuery.current = true
+
         const hash = window.location.hash
         const queryString = hash.includes('?')
           ? hash.substring(hash.indexOf('?') + 1)
@@ -47,7 +51,7 @@ const Users = React.memo( () => {
         if (friend === 'null') actualFriend = null
       
         dispatch(GetUsers(actualPage, PageSize, actualTerm, actualFriend))
-      }, [])
+      }, [PageSize, SearchtermUser, currentPage, dispatch, isFriend])
       
 
     useEffect(() => {
@@ -57,14 +61,14 @@ const Users = React.memo( () => {
         if (isFriend !== null) params.set('friend', String(isFriend))
         if (currentPage !== 1) params.set('page', String(currentPage))
       
-        Navigate(
+        navigate(
           {
             pathname: '/developers',
             search: params.toString()
           },
           { replace: true }
         )
-      }, [SearchtermUser, isFriend, currentPage])
+      }, [SearchtermUser, isFriend, currentPage, navigate])
       
       
 
@@ -83,12 +87,18 @@ const Users = React.memo( () => {
         dispatch(GetUsers(1, PageSize, changedvalues.SearchUser, changedvalues.friends))
     }
     return (
-        <div>
+        <section className='users-page'>
+            <div className='users-page-header'>
+                <h2 className='users-page-title'>Developers</h2>
+                <p className='users-page-subtitle'>Browse profiles without content escaping the main container.</p>
+            </div>
             <UserForm onTermChanged={onTermChanged} />
             <Paginator currentPage={currentPage} TotalItemsCount={TotalUserCount} PageSize={PageSize} OnePageChanged={OnePageChanged} portionSize={10} />
-            <p>(Click on user and select it)</p>
-            {Users.map((u: UsersType) => <User User={u} FollowingInProgress={FollowingInProgres} Follow={FollowU} UnFollow={UnFollowU} key={u.id}/> )}
-        </div>
+            <p className='users-page-hint'>(Click on user and select it)</p>
+            <div className='users-list'>
+                {Users.map((u: UsersType) => <User User={u} FollowingInProgress={FollowingInProgres} Follow={FollowU} UnFollow={UnFollowU} key={u.id}/> )}
+            </div>
+        </section>
     );
 })
 

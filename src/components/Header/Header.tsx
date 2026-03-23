@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import '../../Styles/Header.css'
+import '../../styles/Header.css'
 import { Layout } from 'antd';
 import { MenuOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 import { logout } from "../../redux/authReducer";

@@ -1,5 +1,4 @@
 import React from "react"
-import Preloader from "./Prelooader"
 
 type HelperSuspenseProps = {
   Component: React.ComponentType

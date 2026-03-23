@@ -1,11 +1,7 @@
 import React from "react";
 
-interface TestProps<T> {
-    age: T
-}
-
-function Test<TestProps>(age: TestProps): TestProps {
-    return age
+function identity<T>(value: T): T {
+    return value
 }
 
 const TestForProps = () => {
@@ -16,7 +12,7 @@ const TestForProps = () => {
 
     return (
         <>
-        Age or Hello World: {Test(value) }
+        Age or Hello World: {identity(value) }
         </>
     )
 }

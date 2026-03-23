@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../Styles/Myposts.css'
+import '../../styles/Myposts.css'
 import Post from './Post';
 import AddMessageForm from '../Forms/AddMessageForm'
 import { AddMessageFormValues } from '../../types/Types';
@@ -26,10 +26,16 @@ const Myposts = React.memo((props: MypostsProps) => {
 }
 
     return (
-      <div>
+      <section className='posts-section'>
+        <div className='posts-section-header'>
+          <h3 className='posts-section-title'>My posts</h3>
+          <p className='posts-section-subtitle'>Write something and it will stay inside the profile card.</p>
+        </div>
         <AddMessageForm onSubmit={addNewMessage} />
-      {postMapping}
-      </div>
+        <div className='posts-list'>
+          {postMapping}
+        </div>
+      </section>
     );
 });
 

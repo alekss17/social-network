@@ -1,64 +1,32 @@
-import { UsersType } from "../types/Types"
-import UserPage, { initialStateType, AcceptFollow } from "./UsersReducer"
+import usersReducer, { acceptFollow, initialStateType } from "./UsersReducer";
 
-test("", () => {
+jest.mock('../DAL/api', () => ({
+    UsersApi: {
+        GetUsers: jest.fn(),
+        Follow: jest.fn(),
+        UnFollow: jest.fn(),
+    }
+}));
+
+test("follow action should mark the correct user as followed", () => {
     const state: initialStateType = {
         Users: [
-            {
-                name: "bebe",
-                id: 1,
-                uniqueUrlName: "bebe",
-                photos: {
-                    small: null,
-                    large: null
-                },
-                status: "Alekss",
-                followed: false
-            },
-            {
-                name: "bebe",
-                id: 2,
-                uniqueUrlName: "bebe",
-                photos: {
-                    small: null,
-                    large: null
-                },
-                status: "Alekss",
-                followed: false
-            },
-            {
-                name: "bebe",
-                id: 3,
-                uniqueUrlName: "bebe",
-                photos: {
-                    small: null,
-                    large: null
-                },
-                status: "Alekss",
-                followed: false
-            },
-            {
-                name: "bebe",
-                id: 4,
-                uniqueUrlName: "bebe",
-                photos: {
-                    small: null,
-                    large: null
-                },
-                status: "Alekss",
-                followed: false
-            }
+            { name: "bebe", id: 1, uniqueUrlName: "bebe", photos: { small: null, large: null }, status: "Alekss", followed: false },
+            { name: "bebe", id: 2, uniqueUrlName: "bebe", photos: { small: null, large: null }, status: "Alekss", followed: false },
+            { name: "bebe", id: 3, uniqueUrlName: "bebe", photos: { small: null, large: null }, status: "Alekss", followed: false },
+            { name: "bebe", id: 4, uniqueUrlName: "bebe", photos: { small: null, large: null }, status: "Alekss", followed: false }
         ],
         TotalUserCount: 0,
         PageSize: 5,
         currentPage: 1,
-        isFatching: false,
-        FollowingInProgress: [] as number[],
-        searchTerm: "" as string,
-        friend: null as boolean | null 
-    }
+        isFetching: false,
+        FollowingInProgress: [],
+        searchTerm: "",
+        friend: null
+    };
 
-   const newState = UserPage(state, AcceptFollow(1))
+    const newState = usersReducer(state, acceptFollow(1));
 
-    // expect(newState.User).toBe()
-})
+    expect(newState.Users[0].followed).toBe(true);
+    expect(newState.Users[1].followed).toBe(false);
+});

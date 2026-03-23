@@ -1,14 +1,13 @@
-import React from "react"
-import { Formik, Form } from "formik"
-import TextArea, { createField } from "../common/FormsControl/FormsControl"
-import '../../Styles/ProfileDataF.css'
-import { Button } from "antd"
-import { ProfileFormValue, UserProfile } from "../../types/Types"
+import React from "react";
+import { Formik, Form } from "formik";
+import TextArea, { createField } from "../common/FormsControl/FormsControl";
+import '../../styles/ProfileDataF.css';
+import { ProfileFormValue, SaveProfileResult, UserProfile } from "../../types/Types";
 
 interface ProfileDataFormTypes {
-  profile: UserProfile
-  handleSubmit: (values: ProfileFormValue) => Promise<any>
-  onLeaveSubmit: () => void
+  profile: UserProfile;
+  handleSubmit: (values: ProfileFormValue) => Promise<SaveProfileResult>;
+  onLeaveSubmit: () => void;
 }
 
 const ProfileDataForm = ({ profile, handleSubmit, onLeaveSubmit }: ProfileDataFormTypes) => {
@@ -23,34 +22,34 @@ const ProfileDataForm = ({ profile, handleSubmit, onLeaveSubmit }: ProfileDataFo
         contacts: profile.contacts
       }}
       onSubmit={async (values: ProfileFormValue, { setErrors, setSubmitting }) => {
-        const errors = await handleSubmit(values)
+        const errors = await handleSubmit(values);
 
         if (errors) {
-          setErrors(errors)
+          setErrors(errors);
         }
 
-        setSubmitting(false)
+        setSubmitting(false);
       }}
     >
       {() => (
         <Form>
           <div className="form-actions">
-            <button className="btn-save" type="submit">💾 Save</button>
-            <button className="btn-cancel" type="button" onClick={onLeaveSubmit}>✕ Cancel</button>
+            <button className="btn-save" type="submit">Save</button>
+            <button className="btn-cancel" type="button" onClick={onLeaveSubmit}>Cancel</button>
           </div>
 
           <div>
-            <p>fullName:</p>
+            <p>Full name</p>
             {createField("Full Name", "fullName", undefined, TextArea, "input")}
           </div>
 
           <div>
-            <p>About Me</p>
+            <p>About me</p>
             {createField("About Me", "aboutMe", undefined, TextArea, "input")}
           </div>
 
           <div className="LookingForAJob">
-            <p>lookingForAJob</p>
+            <p>Looking for a job</p>
             {createField("", "lookingForAJob", undefined, TextArea, "input", "checkbox")}
           </div>
 
@@ -60,16 +59,15 @@ const ProfileDataForm = ({ profile, handleSubmit, onLeaveSubmit }: ProfileDataFo
           </div>
 
           <b>Contacts</b>
-          {Object.keys(profile.contacts).map(key => (
+          {Object.keys(profile.contacts).map((key) => (
             <div key={key}>
               {createField(key, `contacts.${key}`, undefined, TextArea)}
             </div>
           ))}
-
         </Form>
       )}
     </Formik>
-  )
-}
+  );
+};
 
-export default ProfileDataForm
+export default ProfileDataForm;

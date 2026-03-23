@@ -1,18 +1,19 @@
-import React from 'react'
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Users from './Users';
-import Preloader from '../common/Preloader/Prelooader'
-import { GetFatching } from '../../redux/selectors/UsersSelector';
+import Preloader from '../common/Preloader/Prelooader';
+import { getIsFetching } from '../../redux/selectors/UsersSelector';
 import AuthRedirectComponent from '../../hoc/WithAuthNavigate';
 
-const UserPage = () => {
-    const isFatching = useSelector(GetFatching)
+const UsersPage = () => {
+    const isFetching = useSelector(getIsFetching);
+
     return (
         <>
-            {isFatching ? <Preloader /> : null}
+            {isFetching ? <Preloader /> : null}
             <Users />
         </>
-    )
-}
+    );
+};
 
-export default AuthRedirectComponent(UserPage);
+export default AuthRedirectComponent(UsersPage);

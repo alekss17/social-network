@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import './Styles/App.css';
-import './Styles/antd-responsive.css';
+import React, { useEffect, useState } from 'react';
+import './styles/App.css';
+import './styles/antd-responsive.css';
 import { Routes, Route, Navigate, HashRouter, Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Preloader from './components/common/Preloader/Prelooader';
 import store, { persistor, AppDispatch } from './redux/redux-store';
-import { Breadcrumb, Button, Layout, Menu, theme, Drawer } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, theme, Drawer } from 'antd';
 
 import TestForProps from './components/tests';
 import Login from './components/Login/login';
 
 import Settings from './components/Settings/Settings';
 import HelperSuspense from './components/common/Preloader/HelperSuspense';
-import SubMenu from 'antd/es/menu/SubMenu';
 import HeaderApp from './components/Header/Header';
+import { initializeApp } from './redux/appReducer';
+import { AppInitialized } from './redux/selectors/appSelector';
 import { GetIsAuth, loginSelector } from './redux/selectors/authSelector';
 import { logout } from './redux/authReducer';
 
@@ -25,17 +25,22 @@ const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileCo
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
 
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 function App() {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { borderRadiusLG },
   } = theme.useToken();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isInitialized = useSelector(AppInitialized);
   const isAuth = useSelector(GetIsAuth);
   const login = useSelector(loginSelector);
   const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initializeApp());
+  }, [dispatch]);
 
   const handleMenuClick = () => {
     setMobileMenuOpen(false);
@@ -46,11 +51,79 @@ function App() {
     setMobileMenuOpen(false);
   };
 
+  const mobileMenuItems = [
+    {
+      key: 'profile-group',
+      label: 'My profile',
+      children: [
+        {
+          key: 'profile',
+          label: <Link to="/profile">Profile</Link>,
+        },
+      ],
+    },
+    {
+      key: 'developers-group',
+      label: 'Developers',
+      children: [
+        {
+          key: 'developers',
+          label: <Link to="/developers">Developers</Link>,
+        },
+      ],
+    },
+    {
+      type: 'divider' as const,
+    },
+    isAuth
+      ? {
+          key: 'account-group',
+          type: 'group' as const,
+          label: `Logged as: ${login}`,
+          children: [
+            {
+              key: 'logout',
+              label: 'Logout',
+              onClick: handleLogout,
+            },
+          ],
+        }
+      : {
+          key: 'login',
+          label: <Link to="/login">Login</Link>,
+        },
+  ];
+
+  const desktopMenuItems = [
+    {
+      key: 'profile-group',
+      label: 'My profile',
+      children: [
+        {
+          key: 'profile',
+          label: <Link to="/profile">Profile</Link>,
+        },
+      ],
+    },
+    {
+      key: 'developers-group',
+      label: 'Developers',
+      children: [
+        {
+          key: 'developers',
+          label: <Link className='Home' to="/developers">Developers</Link>,
+        },
+      ],
+    },
+  ];
+
+  if (!isInitialized) {
+    return <Preloader />;
+  }
+
   return (
     <Layout>
-      <HeaderApp 
-        onMenuClick={() => setMobileMenuOpen(true)} 
-      />
+      <HeaderApp onMenuClick={() => setMobileMenuOpen(true)} />
       
       {/* Mobile Menu Drawer */}
       <Drawer
@@ -62,38 +135,11 @@ function App() {
       >
         <Menu
           mode="vertical"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          defaultSelectedKeys={['profile']}
+          defaultOpenKeys={['profile-group']}
           onClick={handleMenuClick}
-        >
-          <SubMenu key="sub1" title="My profile">
-            <Menu.Item key="1">
-              <Link to="/profile">Profile</Link>
-            </Menu.Item>
-          </SubMenu>
-
-          <SubMenu key="sub2" title="Developers">
-            <Menu.Item key="3">
-              <Link to="/developers">Developers</Link>
-            </Menu.Item>
-          </SubMenu>
-
-          <Menu.Divider />
-
-          {isAuth ? (
-            <>
-              <Menu.ItemGroup title={`Logged as: ${login}`}>
-                <Menu.Item key="logout" onClick={handleLogout}>
-                  Logout
-                </Menu.Item>
-              </Menu.ItemGroup>
-            </>
-          ) : (
-            <Menu.Item key="login">
-              <Link to="/login">Login</Link>
-            </Menu.Item>
-          )}
-        </Menu>
+          items={mobileMenuItems}
+        />
       </Drawer>
       
       <div className='app-main-wrapper'>
@@ -103,32 +149,16 @@ function App() {
         />
         <Layout
           className='app-content-layout'
-          style={{ background: colorBgContainer, borderRadius: borderRadiusLG }}
+          style={{ borderRadius: borderRadiusLG }}
         >
-          <Sider className='app-sider' style={{ background: colorBgContainer }} width={200}>
+          <Sider className='app-sider' width={200}>
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              defaultSelectedKeys={['profile']}
+              defaultOpenKeys={['profile-group']}
               style={{ height: '100%' }}
-            >
-              <SubMenu key="sub1" title="My profile">
-                <Menu.Item key="1">
-                  <Button type='link'>
-                    <Link type='link' to="/profile">Profile</Link>
-                  </Button>
-                </Menu.Item>
-              </SubMenu>
-
-              <SubMenu key="sub2" title="Developers">
-                <Menu.Item key="3">
-                  <Button type='link'>
-                    <Link type='link' className='Home' to="/developers">Developers</Link>
-                  </Button>
-                </Menu.Item>
-              </SubMenu>
-
-            </Menu>
+              items={desktopMenuItems}
+            />
           </Sider>
 
           <Content className='app-content' style={{ minHeight: 280 }}>
@@ -155,7 +185,7 @@ function App() {
 
 let SamurajJSApp = () => {
   return (
-    <HashRouter>
+    <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Provider store={store}>
         <PersistGate loading={<Preloader />} persistor={persistor}>
           <App />

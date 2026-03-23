@@ -1,7 +1,7 @@
 export type Photos = {
     small: string | null;
     large: string | null;
-}
+};
 
 export type Contacts = {
     facebook: string | null;
@@ -12,7 +12,7 @@ export type Contacts = {
     youtube: string | null;
     github: string | null;
     mainLink: string | null;
-}
+};
 
 export type UserProfile = {
     aboutMe: string | null;
@@ -22,7 +22,7 @@ export type UserProfile = {
     fullName: string;
     userId: number;
     photos: Photos;
-}
+};
 
 export type ProfileFormValue = {
     fullName: string;
@@ -30,62 +30,59 @@ export type ProfileFormValue = {
     lookingForAJob: boolean;
     lookingForAJobDescription: string | null;
     contacts: Contacts;
-}
+};
+
+export type ProfileFormErrors = {
+    contacts: Partial<Record<keyof Contacts, string>>;
+};
+
+export type SaveProfileResult = ProfileFormErrors | null | undefined;
+
 export type ProfileTypeProps = {
     UpdateProfileStats: (status: string) => void;
     isOwner: boolean;
     savePhoto: (file: File) => void;
-    saveProfile: (profile: ProfileFormValue) => Promise<any>
-}
+    saveProfile: (profile: ProfileFormValue) => Promise<SaveProfileResult>;
+};
 
 export type UsersType = {
-    name: string,
-    id: number,
-    uniqueUrlName: null | string,
-    photos: {
-        small: null | string,
-        large: null | string
-    },
-    status: null | string,
-    followed: boolean
-}
+    name: string;
+    id: number;
+    uniqueUrlName: string | null;
+    photos: Photos;
+    status: string | null;
+    followed: boolean;
+};
 
-export type HeaderPropsTypes = {
-    isAuth: boolean;
-    login: string | null;
-    logout: () => void;
-}
 export type MessagesType = {
-    id: string,
-    messages: string,
-    userId: string | number
-}
+    id: string;
+    messages: string;
+    userId: string | number;
+};
 
 export type DialogType = {
-    id: number,
-    name: string
-  }
+    id: number;
+    name: string;
+};
 
-  export type DialogFormValues = {
+export type DialogFormValues = {
     onDialogBody: string;
-  }
+};
 
-  export type AddMessageFormValues = {
+export type AddMessageFormValues = {
     newMessageBody: string;
-  }
+};
 
-  export type formDataType = {
+export type FormDataType = {
     email: string;
     password: string;
     rememberMe: boolean;
     captcha: string;
-}
+};
 
-
-
-// enums
 export enum ResultCodeEnum {
-    Succes = 0, 
+    Success = 0,
+    Succes = 0,
     Error = 1,
 }
 

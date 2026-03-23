@@ -12,11 +12,6 @@ const profilePersistConfig = {
   whitelist: ['postData']
 };
 
-const ChatPersistConfig = {
-  key: 'chat',
-  storage
-};
-
 const authPersistConfig = {
   key: 'auth',
   storage,
